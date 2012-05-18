@@ -14,6 +14,23 @@ $.fn.salsaform = function (options) {
 
   var options = $.extend(defaults,options);
 
+  //This function will get the elements between two selectors
+  function get_all_between(first_element,last_element) {
+    var first_elementement = $(first_element); // First Element
+    var last_elementement = $(last_element); // Last Element
+    var collection = new Array(); // Collection of Elements
+    collection.push(first_elementement); // Add First Element to Collection
+    $(first_element).nextAll().each(function(){ // Traverse all siblings
+        var siblingID  = $(this).attr("id"); // Get Sibling ID
+        if (siblingID != $(last_elementement).attr("id")) { // If Sib is not last_elementement
+                collection.push($(this)); // Add Sibling to Collection
+        } else { // Else, if Sib is last_elementement
+                return false; // Break Loop
+        }
+    });         
+    return collection; // Return Collection
+  }
+
   //Determine which page type we're working with
   function get_page_type {
     //Get the URL parameters, which tell salsa what kind of page this is
@@ -43,17 +60,33 @@ $.fn.salsaform = function (options) {
     //Store the current object for later use
     obj = $(this);
 
+    //Store the actual form that we want in a variable
+    var form = obj.find('form');
+
     //Get the page type
     var page_type = get_page_type();
+
+    //Initialize some variables we'll need later
+    var description;
+
+    //Get an array of the required fields
+    var required_fields = $('input[name="required"]').value().split(',');
+
+    //Cycle through the required fields and add a class of "required" to them
+    $.each(required_field, function(index, field_name) {
+      obj.find('input[name="'+field_name+'"]').addClass('required');
+    });
 
     //Now that we know what kind of page it is, let's get the elements we want and store them in handy variables
     switch (page_type)
     {
       case 'signup_page':
-       break;
+        description = get_all_between('.memberSignup','input');
+        break;
       case 'donate_page':
         break;
       case 'action':
+        description = obj.find('info-page').not('form').html().detach;  
         break;
       case 'tell_a_friend':
         break;
@@ -63,29 +96,33 @@ $.fn.salsaform = function (options) {
         break;
     }
 
+    //Put the description in a useful place
+    $('div.salsa').append('<div id="salsa_description"></div>');
+    $('#salsa_description').html(description);
+
     //If the validation option is truthy, use the jQuery validate plugin
     if (options.validate) {
-      obj.validate();
+      form.validate();
     }
 
     //If the ajax option is truthy, then submit the form with ajax, hide it, and show a TY div
     if (options.ajax) {
       //On submit, do the following
-      $(obj.submit(function(e) {
+      $(form.submit(function(e) {
         //Stop the form from submitting as normal
         e.preventDefault();
         //Check to see if the validation passed
-        if (obj.valid()) {
+        if (form.valid()) {
           //Serialize the form data
-          var formData = obj.serialize();
+          var formData = form.serialize();
           //Post that sucke to salsa! But don't wait for success callback, because Salsa is shitty and will say it fails no matter what
           $.ajax({
             type: 'POST',
-            url: obj.attr('action'),
+            url: form.attr('action'),
             data: formData,
           });
           //Slide up the form and hide it
-          obj.slideUp('slow',
+          form.slideUp('slow',
           function() {
             //Slide down the TY div
             $('#signup-finish').slideDown();
