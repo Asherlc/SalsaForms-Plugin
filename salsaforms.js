@@ -1,6 +1,6 @@
 //This is our actual plugin
 (function($) {
-  $.salsaform = function(options) {
+  $.salsaform = function (options) {
 
     console.log('Salsaforms lugin has started. Fasten your seatbelts!');
 
@@ -117,3 +117,6 @@
     $('div.salsa input[type="submit"]').val(options.button_text);
   };
 })(jQuery);
+$(document).ready(function() {
+$.salsaform();
+});
