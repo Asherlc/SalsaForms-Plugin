@@ -27,14 +27,14 @@
 
     options = $.extend(defaults,options);
 
-    //Get the URL parameters, which tell salsa what kind of page this is
-    function get_URL_params() {
-      console.log('Getting the url parameters...');
-      var vars = {};
-      var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-        vars[key] = value;
+    function setValidationClasses() {
+      $('[name="Email"]').addClass('email');
+      $('[name="Zip"]').addClass('zip');
+      var requiredList = $('[name="required"]').val();
+      var requiredArray = requiredList.split(',')
+      $.each(requiredArray, function(index, value) {
+        $('[name="'+value+'"]').addClass('required');
       });
-      return vars;
     }
 
     //This function submits a form via Ajax
@@ -53,7 +53,7 @@
             data: formData
           });
           //Slide up the form and hide it
-          form.slideUp('slow',
+          $('div.salsa').slideUp('slow',
           function() {
             //Slide down the TY div
             $('#signup-finish').slideDown();
@@ -79,29 +79,10 @@
           page_type = page_param.replace( '_KEY', '' );
        });
     }
-
-    //Now that we know what kind of page it is, let's get the elements we want and store them in handy variables
-    switch (page_type)
-    {
-      case 'signup_page':
-        console.log('This is a signup page');
-        break;
-      case 'donate_page':
-        break;
-      case 'action':
-        //description = obj.find('info-page').not('form').html().detach; 
-        //console.log('This is an action page');
-        break;
-      case 'tell_a_friend':
-        break;
-      case 'questionnaire':
-        break;
-      case 'supporter_my_donate_page':
-        break;
-    }
-      
+ 
     //If the validation option is truthy, use the jQuery validate plugin
     if (options.validate) {
+      setValidationClasses();
       console.log('Form validation is set to run.');
       form.validate();
     }
