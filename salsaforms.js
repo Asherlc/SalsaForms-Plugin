@@ -1,13 +1,17 @@
 //This is our actual plugin
 (function($) {
-  $.fn.salsaform = function(options) {
+  $.salsaform = function(options) {
+
+    console.log('Salsaforms lugin has started. Fasten your seatbelts!');
 
     //Add the CSS styles to the page
     $('head').append('<link rel="stylesheet" href="style2.css" type="text/css" />');
 
     //Some variable's we'll need later
     var page_type,
-       page_param;
+        page_param;
+
+    var form = $('div.salsa form');
 
     //Set the default for the options
     var defaults = {
@@ -74,80 +78,42 @@
           }
           page_type = page_param.replace( '_KEY', '' );
        });
-
-      //Stop the loop
-      return false;
     }
 
-    //Send the object back for extension
-    return this.each(function() {
-      console.log('We are running the plugin on a new object');
-
-      //Store the current object for later use
-      var obj = $(this);
-
-      //Store the actual form that we want in a variable
-      var form = obj.find('form');
-
-      //Get the page type
-      get_page_type();
-      console.log('Our page type is: '+page_type);
-
-      //Initialize some variables we'll need later
-      var description;
-
-      //Get an array of the required fields
-      var required_fields = $('input[name="required"]').val().split(',');
-
-      //Cycle through the required fields and add a class of "required" to them
-      $.each(required_fields, function(index, field_name) {
-        console.log('Adding the required class to: '+field_name);
-        form.find('input[name="'+field_name+'"]').addClass('required');
-        console.log(form);
-      });
-
-      //Now that we know what kind of page it is, let's get the elements we want and store them in handy variables
-      switch (page_type)
-      {
-        case 'signup_page':
-          $('div.memberSignup').after('<div id="salsa_description">');
-          $('input[name="redirect"]').before('</div>');
-          description = $('#salsa_description').detach();
-          console.log('This is a signup page');
-          console.log(description);
-          break;
-        case 'donate_page':
-          break;
-        case 'action':
-          //description = obj.find('info-page').not('form').html().detach; 
-          //console.log('This is an action page');
-          break;
-        case 'tell_a_friend':
-          break;
-        case 'questionnaire':
-          break;
-        case 'supporter_my_donate_page':
-          break;
-      }
-
-      console.log('hello');
-
-      //Put the description in a useful place
-      $('div.salsa').prepend($('#salsa_description'));
-
+    //Now that we know what kind of page it is, let's get the elements we want and store them in handy variables
+    switch (page_type)
+    {
+      case 'signup_page':
+        console.log('This is a signup page');
+        break;
+      case 'donate_page':
+        break;
+      case 'action':
+        //description = obj.find('info-page').not('form').html().detach; 
+        //console.log('This is an action page');
+        break;
+      case 'tell_a_friend':
+        break;
+      case 'questionnaire':
+        break;
+      case 'supporter_my_donate_page':
+        break;
+    }
       
-      //If the validation option is truthy, use the jQuery validate plugin
-      if (options.validate) {
-        form.validate();
-      }
+    //If the validation option is truthy, use the jQuery validate plugin
+    if (options.validate) {
+      console.log('Form validation is set to run.');
+      form.validate();
+    }
 
-      //If the ajax option is truthy, then submit the form with ajax, hide it, and show a TY div
-      if (options.ajax) {
-        submit_form_ajax(form);
-      }
+    //If the ajax option is truthy, then submit the form with ajax, hide it, and show a TY div
+    if (options.ajax) {
+      console.log('Form is set to submit via ajax.');
+      submit_form_ajax(form);
+    }
 
-      //Change the submit button text
-      obj.find('#submitSignup').val(options.button_text);
-    });
+    //Change the submit button text
+    console.log('Changing the submit button text to: '+options.button_text);
+    $('div.salsa input[type="submit"]').val(options.button_text);
   };
 })(jQuery);
