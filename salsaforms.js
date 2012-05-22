@@ -14,7 +14,7 @@
       //Should the form submit with ajax and have same-page TY?
       ajax : true,
       //What should the submit button say?
-      button_text : 'Take Action',
+      buttonText : 'Take Action',
       //What CSS layout should the form use?
       layout : 'two_column',
       //Should this use AddThis for the TY?
@@ -29,10 +29,8 @@
     $('head').append('<link rel="stylesheet" href="http://assets.trilogyinteractive.com/shared/css/SalsaForms.css" type="text/css" />');
 
     //Load the addThis and Validate JS files
-    $.getScript("http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-"+options.addThisID);
+    $.getScript('http://s7.addthis.com/js/250/addthis_widget.js#domready=1');
     $.getScript('http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js');
-
-    var addThisHTML = '<div class="addthis_toolbox addthis_default_style "><a class="addthis_button_facebook_like" fb:like:layout="button_count"></a><a class="addthis_button_tweet"></a><a class="addthis_button_google_plusone" g:plusone:size="medium"></a><a class="addthis_counter addthis_pill_style"></a></div>';
 
     //Give the fields appropriate classes to use jQuery validate with little to no tweaking
     function setValidationClasses() {
@@ -68,12 +66,24 @@
     }
 
     //Load the AddThis stuff into the page
-    function loadAddThis(addThisButtons) {
-      $('#success_message').html(addThisHTML).slideDown;
+    function loadAddThis() {
+      //First give it a hash of buttons we want, and their text attributes (not used)
+      svcs = {email: 'Email', google_plusone: 'Google Plus', tweet: 'Print', facebook_like: 'Facebook', expanded: 'More'};
+      //Initialize the variable that will hold our HTML string
+      var addThisButtons  = '';
+      //Cycle through the hash, and make an anchor element for each
+      for (var s in svcs) {
+        addThisButtons += '<a class="addthis_button_'+s+'"></a>';
+      }
+      //Put all that HTML in the success message div
+      $('#success_message').html(addThisButtons);
+      //Initialize AddThis magic on that div
+      addthis.toolbox("#success_message");
+      addthis.init();
     }
 
     //This function submits a form via Ajax
-    function submit_form_ajax(form) {
+    function submitFormAjax(form) {
       $(form).submit(function(e) {
         //Stop the form from submitting as normal
         e.preventDefault();
@@ -115,12 +125,12 @@
     console.log('Checking if ajax set to run.');
     if (options.ajax) {
       console.log('Form is set to submit via ajax.');
-      submit_form_ajax(form);
+      submitFormAjax(form);
     }
 
     //Change the submit button text
-    console.log('Changing the submit button text to: '+options.button_text);
-    $('div.salsa input[type="submit"]').val(options.button_text);
+    console.log('Changing the submit button text to: '+options.buttonText);
+    $('div.salsa input[type="submit"]').val(options.buttonText);
 
   };
 })(jQuery);
