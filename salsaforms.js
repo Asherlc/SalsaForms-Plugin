@@ -1,4 +1,3 @@
-//This is our actual plugin
 (function($) {
   $.salsaform = function (options) {
 
@@ -67,13 +66,13 @@
 
     //Load the AddThis stuff into the page
     function loadAddThis() {
-      //First give it a hash of buttons we want, and their text attributes (not used)
-      svcs = {email: 'Email', google_plusone: 'Google Plus', tweet: 'Print', facebook_like: 'Facebook', expanded: 'More'};
+      //First give it an array of buttons we want
+      svcs = ['email', 'google_plusone', 'tweet', 'facebook_like', 'expanded'];
       //Initialize the variable that will hold our HTML string
       var addThisButtons  = '';
       //Cycle through the hash, and make an anchor element for each
       for (var s in svcs) {
-        addThisButtons += '<a class="addthis_button_'+s+'"></a>';
+        addThisButtons += '<a class="addthis_button_'+svcs[s]+'"></a>';
       }
       //Put all that HTML in the success message div
       $('#success_message').html(addThisButtons);
@@ -91,7 +90,7 @@
         if (form.valid()) {
           //Serialize the form data
           var formData = form.serialize();
-          //Post that sucke to salsa! But don't wait for success callback, because Salsa is shitty and will say it fails no matter what
+          //Post that sucker to salsa! But don't wait for success callback, because Salsa is shitty and will say it fails no matter what
           $.ajax({
             type: 'POST',
             url: form.attr('action'),
