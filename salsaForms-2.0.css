@@ -347,3 +347,13 @@ label.validate-error {
   color: red!important;
   padding: 5px;
 }
+
+#tafForm {
+  min-width: 400px!important;
+}
+
+#info-page.taf {
+    float: left;
+    margin-right: 25px;
+    width: 50%;
+}

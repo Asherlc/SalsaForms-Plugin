@@ -5,7 +5,6 @@
 
     //Store the form, we'll be using it later
     var form = $('div.salsa form');
-    console.log(form);
 
     //Set the default for the options
     var defaults = {
@@ -71,13 +70,16 @@
     
       //Store the string of required fields
       var requiredList = $('[name="required"]').val();
+      console.log(requiredList);
   
       //Is there a hidden list of required fields?
       if (requiredList) {
+        console.log('Listing required fields...');
         //Split the string into an array of required field names
         var requiredArray = requiredList.split(',');
         //For each required field name, find the appropriate field and add a class of "required"
         $.each(requiredArray, function(index, value) {
+          console.log(value+' is a required field');
           $('[name="'+value+'"]').addClass('required');
         });
       }
@@ -160,6 +162,12 @@
       $('.salsa form style').nextUntil('input').detach().insertBefore(form).wrapAll('<div id="info-page" />');
     }
 
+    //This is for TAF pages
+    function restructureTAFPage() {
+      console.log('Cleaning up this TAF pages...');
+      $('[name="organization_KEY"]').nextUntil('script').detach().insertBefore(form).wrapAll('<div id="info-page" class="taf" />');
+    }
+
     //Get the URL parameters as a hash
     function getURLParams() {
       console.log('Getting the url parameters...');
@@ -207,6 +215,8 @@
         restructureActionPage();
         break;
       case 'tell_a_friend':
+        console.log('This is a TAF page');
+        restructureTAFPage();
         break;
       case 'questionnaire':
         break;
