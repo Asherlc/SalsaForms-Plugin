@@ -26,26 +26,26 @@ Example Code
 
 To use it, insert this code in your form:
 
-  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-  <script type="text/javascript" src="https://assets.trilogyinteractive.com/shared/js/salsaforms.js"></script>
-  <script>
-  $(document).ready(function() {
-    $.salsaform();
-  });
-  </script>
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <script type="text/javascript" src="https://assets.trilogyinteractive.com/shared/js/salsaforms.js"></script>
+    <script>
+    $(document).ready(function() {
+      $.salsaform();
+    });
+    </script>
 
 Example instance where we want the button to say "Sign petition", and no validation:
 
-  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-  <script type="text/javascript" src="https://assets.trilogyinteractive.com/shared/js/salsaforms.js"></script>
-  <script>
-  $(document).ready(function() {
-    $.salsaform({
-      validate: false,
-      buttonText: 'Sign petition'
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <script type="text/javascript" src="https://assets.trilogyinteractive.com/shared/js/salsaforms.js"></script>
+    <script>
+    $(document).ready(function() {
+      $.salsaform({
+        validate: false,
+        buttonText: 'Sign petition'
+      });
     });
-  });
-  </script>
+    </script>
 
 FAQ:
 ----
