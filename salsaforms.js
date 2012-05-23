@@ -19,8 +19,15 @@
       //Should this use AddThis for the TY?
       addThis: true
     };
+    
+    //Is there a redirect URL present? If so, set the default to no ajax
+    if ($('[name="redirect"]').val().length > 1) {
+      defaults.ajax = false;
+    }
 
     options = $.extend(defaults,options);
+
+
 
      //Add the CSS styles to the page
     $('head').append('<link rel="stylesheet" href="http://assets.trilogyinteractive.com/shared/css/SalsaForms-2.0.css" type="text/css" />');
@@ -109,6 +116,72 @@
       });
     }
 
+    //These functions restructure the page, so that it is easier to style
+    //This is for action pages
+    function restructureActionPage() {
+      console.log('Cleaning up this action page...');
+      $('div.signatures').insertAfter(form);
+      $('.petitionContent').appendTo('#info-page')
+    }
+
+    //This one is for signup pages
+    function restructureSignupPage() {
+      console.log('Cleaning up this signup page...');
+      $('.salsa form style').nextUntil('input').detach().insertBefore(form).wrapAll('<div id="info-page" />');
+    }
+
+    //Get the URL parameters as a hash
+    function getURLParams() {
+      console.log('Getting the url parameters...');
+      var vars = {};
+      var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+      });
+      return vars;
+    }
+
+    //Determine which page type we're working with
+    function getPageType() {
+      //Store those params in a variable
+      var pageType;
+      var URLParamaters = getURLParams();
+
+      //Iterate over the parameters, find on that has _KEY in it (that tells us what page type it is)
+      $.each(URLParamaters, function(parameterName, value) {
+        console.log('Finding the page parameter..');
+        var key_pattern = new RegExp( "_KEY" );
+        //If one of them matches the regex, let's use it
+        if ( key_pattern.test(parameterName)) {
+          console.log('The KEY parameters is: '+parameterName);
+          pageType = parameterName.replace( '_KEY', '' );
+        }
+       });
+
+      return pageType;
+    }
+
+    //Now that we know what kind of page it is, let's get the elements we want and store them in handy variables
+    console.log('Switching through page types...');
+    switch (getPageType())
+    {
+      case 'signup_page':
+        console.log('This is a signup page');
+        restructureSignupPage();
+        break;
+      case 'donate_page':
+        break;
+      case 'action':
+        console.log('This is an action page');
+        restructureActionPage();
+        break;
+      case 'tell_a_friend':
+        break;
+      case 'questionnaire':
+        break;
+      case 'supporter_my_donate_page':
+        break;
+    }
+
 
     //If the validation option is truthy, use the jQuery validate plugin
     console.log('Checking if validation set to run.');
@@ -116,7 +189,7 @@
       setValidationClasses();
       console.log('Form validation is set to run.');
       //Validate the form, but don't put any ugly error messages
-      form.validate({ errorPlacement: function(error, element) {} });
+      form.validate({ errorPlacement: function(error, element) {}, errorClass: "validate-error" });
     }
 
     //If the ajax option is truthy, then submit the form with ajax, hide it, and show a TY div

@@ -273,11 +273,49 @@ input.error,#state_select.error,#cc_month.error,#cc_year.error
   -moz-box-shadow:#C11B17 0 0 10px inset;
   -webkit-box-shadow:#C11B17 0 0 10px inset;
   box-shadow:#C11B17 0 0 10px inset;
-  margin:none!important;
+  margin-left:none!important;
+  margin-right:none!important;
 }
 
 #donation_amounts input,#donation_recurring input,#confirm_eligibility input,#submit,#salsa-unsubscribe-form input[type="radio"],#salsa-unsubscribe-form input[type="checkbox"]
 {
   width:auto;
   height:auto;
+}
+
+#submitDiv #submitButton {
+  margin:25px;
+}
+
+.salsa .diaFields textarea {
+  width:200px;
+}
+
+.supporterInfo' {
+  margin-bottom:15px;
+}
+
+.salsa .formRow {
+  clear:both;
+}
+
+#info-page {
+  float: left;
+  margin-right: 25px;
+  width: 70%;
+}
+
+.salsa form {
+  float: right;
+  width: 27%;
+}
+
+.validate-error {
+  -moz-box-shadow:#C11B17 0 0 10px inset;
+  -webkit-box-shadow:#C11B17 0 0 10px inset;
+  box-shadow:#C11B17 0 0 10px inset;
+}
+.salsa.donation form {
+  width: 100%!important;
+  float: none!important;
 }
