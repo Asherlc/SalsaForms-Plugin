@@ -19,7 +19,9 @@
       //Should this use AddThis for the TY?
       addThis: true,
       //Set a default thank you message
-      thankYouMessage: 'Now, share your action with your friends:'
+      thankYouMessage: 'Now, share your action with your friends:',
+      //Should we prettify the form, or assume that the site has built-in CSS for the form?
+      prettify: true
     };
     
     //Is there a redirect URL present? If so, set the default to no ajax
@@ -45,9 +47,12 @@
     }
 
 
-     //Add the CSS styles to the page
-    $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/SalsaForms-2.0.css" type="text/css" />');
-    $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/uniform.default.css" type="text/css" />');
+    //Add the CSS styles to the page
+    $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/SalsaForms-structure-2.0.css" type="text/css" />');
+    if (options.prettify) {
+      console.log('Adding the prettifying styles..');
+      $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/SalsaForms-2.0.css" type="text/css" />');
+    }
 
     //Load the addThis and Validate JS files
     $.getScript('https://s7.addthis.com/js/250/addthis_widget.js#domready=1', function() {

@@ -1,0 +1,38 @@
+#tafForm {
+  min-width: 400px!important;
+}
+
+#info-page.taf {
+    float: left;
+    margin-right: 25px;
+    width: 50%;
+}
+
+#addthis {
+  background: none repeat scroll 0 0 white;
+  border: 1px solid black;
+  border-radius: 5px 5px 5px 5px;
+  margin-left: 25%;
+  padding: 10%;
+  width: 70px;
+}
+
+.memberSignup {
+  display: none;
+}
+
+#addthis a {
+  display: block;
+  margin-top: 10px;
+}
+
+.salsa form, #success-message {
+  float: right;
+  min-width: 250px;
+  width: 27%;
+}
+
+.salsa.donation form {
+  width: 100%!important;
+  float: none!important;
+}
