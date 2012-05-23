@@ -305,7 +305,7 @@ input.error,#state_select.error,#cc_month.error,#cc_year.error
   width: 70%;
 }
 
-.salsa form {
+.salsa form, #success-message {
   float: right;
   width: 27%;
 }
@@ -314,8 +314,27 @@ input.error,#state_select.error,#cc_month.error,#cc_year.error
   -moz-box-shadow:#C11B17 0 0 10px inset;
   -webkit-box-shadow:#C11B17 0 0 10px inset;
   box-shadow:#C11B17 0 0 10px inset;
+  background-color:#FFBABA;
 }
 .salsa.donation form {
   width: 100%!important;
   float: none!important;
+}
+
+#addthis a {
+  display: block;
+  margin-top: 10px;
+}
+
+#addthis {
+  background: none repeat scroll 0 0 white;
+  border: 1px solid black;
+  border-radius: 5px 5px 5px 5px;
+  margin-left: 25%;
+  padding: 10%;
+  width: 70px;
+}
+
+.memberSignup {
+  display: none;
 }

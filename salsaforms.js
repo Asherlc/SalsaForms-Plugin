@@ -21,20 +21,28 @@
     };
     
     //Is there a redirect URL present? If so, set the default to no ajax
-    if ($('[name="redirect"]').val().length > 1) {
+    console.log('Checking for a redirect...');
+    if ($('[name="redirect"]').val() === 'thankYou.sjs') {
+      console.log('There is a redirect, but it is a default one. Proceeding with ajax');
+    }else if ($('[name="redirect"]').val().length > 1) {
+      console.log('Looks like we have a redirect. Set ajax to false');
       defaults.ajax = false;
     }
 
     options = $.extend(defaults,options);
 
 
-
      //Add the CSS styles to the page
     $('head').append('<link rel="stylesheet" href="http://assets.trilogyinteractive.com/shared/css/SalsaForms-2.0.css" type="text/css" />');
+    $('head').append('<link rel="stylesheet" href="http://assets.trilogyinteractive.com/shared/css/uniform.default.css" type="text/css" />');
 
     //Load the addThis and Validate JS files
-    $.getScript('http://s7.addthis.com/js/250/addthis_widget.js#domready=1');
-    $.getScript('http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js');
+    $.getScript('http://s7.addthis.com/js/250/addthis_widget.js#domready=1', function() {
+      console.log('Addthis script loaded');
+    });
+    $.getScript('http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js', function() {
+      console.log('Validate script loaded');
+    });
 
     //Give the fields appropriate classes to use jQuery validate with little to no tweaking
     function setValidationClasses() {
@@ -43,7 +51,7 @@
 
       //Set the email and zip classes, which have special rules
       $('[name="Email"]').addClass('email');
-      $('[name="Zip"]').addClass('zip');
+      $('[name="Zip"]').addClass('zip PostalCode');
 
     
       //Store the string of required fields
@@ -66,7 +74,7 @@
       //Load the TY page, and slide it down
       var thankYouURL = $('[name="redirect"]').val();
       //Loading the TY page
-      $('#success_message').load(thankYouURL).slideDown();
+      $('#success-message').load(thankYouURL).slideDown();
     }
 
     //Load the AddThis stuff into the page
@@ -74,15 +82,16 @@
       //First give it an array of buttons we want
       var svcs = ['email', 'google_plusone', 'tweet', 'facebook_like', 'expanded'];
       //Initialize the variable that will hold our HTML string
-      var addThisButtons  = '';
+      var addThisButtons = '<div id="addthis">';
       //Cycle through the hash, and make an anchor element for each
       for (var s in svcs) {
         addThisButtons += '<a class="addthis_button_'+svcs[s]+'"></a>';
       }
+      addThisButtons += '</div>'
       //Put all that HTML in the success message div
-      $('#success_message').html(addThisButtons);
+      $('#success-message').append(addThisButtons);
       //Initialize AddThis magic on that div
-      addthis.toolbox("#success_message");
+      addthis.toolbox("#success-message");
       addthis.init();
     }
 
@@ -102,12 +111,13 @@
             data: formData
           });
           //Slide up the form and hide it
-          $('div.salsa').slideUp('slow',
+          form.slideUp('slow',
             function () {
-              $('div.salsa').before('<div id="success_message"></div>');
+              form.replaceWith('<div id="success-message"><h2>Thank you!</h2><p>Now, share your action with your friends:</p></div>');
               if (options.addThis) {
                 console.log('Loading AddThis');
                 loadAddThis();
+                form.slideDown();
               }else{
                 loadThankYou();
               }
@@ -116,12 +126,16 @@
       });
     }
 
+    function addDonationValidationClasses() {
+      $('#eligibility, #cc_type, #ccExpMonth, #ccExpYear, #CVV2, #cc_number').addClass('required');
+    }
+
     //These functions restructure the page, so that it is easier to style
     //This is for action pages
     function restructureActionPage() {
       console.log('Cleaning up this action page...');
       $('div.signatures').insertAfter(form);
-      $('.petitionContent').appendTo('#info-page')
+      $('.petitionContent').appendTo('#info-page');
     }
 
     //This one is for signup pages
@@ -169,6 +183,8 @@
         restructureSignupPage();
         break;
       case 'donate_page':
+        console.log('This is a donation page');
+        addDonationValidationClasses();
         break;
       case 'action':
         console.log('This is an action page');
@@ -182,6 +198,20 @@
         break;
     }
 
+    var validateOptions = {
+      errorPlacement: function(error, element) {},
+      errorClass: "validate-error",
+      rules: {
+        cc: {
+          creditcard: true
+        },
+        Zip: {
+          minlength: 5
+        }
+      }
+    };
+
+
 
     //If the validation option is truthy, use the jQuery validate plugin
     console.log('Checking if validation set to run.');
@@ -189,7 +219,7 @@
       setValidationClasses();
       console.log('Form validation is set to run.');
       //Validate the form, but don't put any ugly error messages
-      form.validate({ errorPlacement: function(error, element) {}, errorClass: "validate-error" });
+      form.validate(validateOptions);
     }
 
     //If the ajax option is truthy, then submit the form with ajax, hide it, and show a TY div
