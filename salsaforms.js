@@ -71,6 +71,7 @@
       //Set the email and zip classes, which have special rules
       $('[name="Email"]').addClass('email');
       $('[name="Zip"]').addClass('zip PostalCode');
+      $('[name="emailString"]').addClass('email');
 
     
       //Store the string of required fields
