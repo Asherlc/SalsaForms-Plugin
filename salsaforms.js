@@ -5,6 +5,7 @@
 
     //Store the form, we'll be using it later
     var form = $('div.salsa form');
+    console.log(form);
 
     //Set the default for the options
     var defaults = {
@@ -17,7 +18,9 @@
       //What CSS layout should the form use?
       layout : 'two_column',
       //Should this use AddThis for the TY?
-      addThis: true
+      addThis: true,
+      //Set a default thank you message
+      thankYouMessage: 'Now, share your action with your friends:'
     };
     
     //Is there a redirect URL present? If so, set the default to no ajax
@@ -31,17 +34,29 @@
 
     options = $.extend(defaults,options);
 
+    function validateForm() {
+      //If the validation option is truthy, use the jQuery validate plugin
+      console.log('Checking if validation set to run.');
+      if (options.validate) {
+        setValidationClasses();
+        console.log('Form validation is set to run.');
+        //Validate the form, but don't put any ugly error messages
+        form.validate(validateOptions);
+      }
+    }
+
 
      //Add the CSS styles to the page
-    $('head').append('<link rel="stylesheet" href="http://assets.trilogyinteractive.com/shared/css/SalsaForms-2.0.css" type="text/css" />');
-    $('head').append('<link rel="stylesheet" href="http://assets.trilogyinteractive.com/shared/css/uniform.default.css" type="text/css" />');
+    $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/SalsaForms-2.0.css" type="text/css" />');
+    $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/uniform.default.css" type="text/css" />');
 
     //Load the addThis and Validate JS files
-    $.getScript('http://s7.addthis.com/js/250/addthis_widget.js#domready=1', function() {
+    $.getScript('https://s7.addthis.com/js/250/addthis_widget.js#domready=1', function() {
       console.log('Addthis script loaded');
     });
-    $.getScript('http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js', function() {
+    $.getScript('https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js', function() {
       console.log('Validate script loaded');
+      validateForm();
     });
 
     //Give the fields appropriate classes to use jQuery validate with little to no tweaking
@@ -87,7 +102,7 @@
       for (var s in svcs) {
         addThisButtons += '<a class="addthis_button_'+svcs[s]+'"></a>';
       }
-      addThisButtons += '</div>'
+      addThisButtons += '</div>';
       //Put all that HTML in the success message div
       $('#success-message').append(addThisButtons);
       //Initialize AddThis magic on that div
@@ -113,7 +128,7 @@
           //Slide up the form and hide it
           form.slideUp('slow',
             function () {
-              form.replaceWith('<div id="success-message"><h2>Thank you!</h2><p>Now, share your action with your friends:</p></div>');
+              form.replaceWith('<div id="success-message"><h2>Thank you!</h2><p>'+options.thankYouMessage+'</p></div>');
               if (options.addThis) {
                 console.log('Loading AddThis');
                 loadAddThis();
@@ -126,6 +141,7 @@
       });
     }
 
+    //This function adds the required class to always-required fields on donation pages
     function addDonationValidationClasses() {
       $('#eligibility, #cc_type, #ccExpMonth, #ccExpYear, #CVV2, #cc_number').addClass('required');
     }
@@ -199,7 +215,7 @@
     }
 
     var validateOptions = {
-      errorPlacement: function(error, element) {},
+      //errorPlacement: function(error, element) {},
       errorClass: "validate-error",
       rules: {
         cc: {
@@ -207,20 +223,47 @@
         },
         Zip: {
           minlength: 5
+        },
+        amount: {
+          required: true
         }
+      },
+      messages: {
+          First_Name: "Please enter your first name",
+          Last_Name: "Please enter your last name",
+          Street: "Please enter your street address",
+          State: "Please select your state",
+          Employer: "Please enter an employer. If you are retired or a homemaker, please enter <em>N/A</em>; if self-employed, please enter <em>self-employed</em>",
+          Occupation: "Please enter an occupation. If you are retired, please enter <em>retired</em>; if a homemaker, please enter <em>homemaker</em>",
+          Employer_City: "Please enter the city where your employer is located.",
+          Employer_State: "Please enter the state where your employer is located.",
+          amount: "Please select a contribution amount",
+          cc_type: "Please select your credit card type",
+          ccExpMonth: "Please select your card's expiration date",
+          eligibility: "Please confirm your eligibility",
+          Email: {
+              required: "Please enter an email address",
+              email: "Please enter a properly formatted email address"
+          },
+          City: {
+              required: "Please enter your city",
+              minlength: "Please enter a valid city"
+          },
+          Zip: {
+              required: "Please enter your zip code",
+              minlength: "Please enter a valid zip code"
+          },
+          cc: {
+              required: "Please enter your credit card number",
+              number: "Please enter a valid credit card number"
+          },
+          CVV2: {
+              required: "Please enter a security code",
+              minlength: "Please enter a 3- or 4-digit CVV2 security code",
+              number: "The security code should be all numbers"
+          }
       }
     };
-
-
-
-    //If the validation option is truthy, use the jQuery validate plugin
-    console.log('Checking if validation set to run.');
-    if (options.validate) {
-      setValidationClasses();
-      console.log('Form validation is set to run.');
-      //Validate the form, but don't put any ugly error messages
-      form.validate(validateOptions);
-    }
 
     //If the ajax option is truthy, then submit the form with ajax, hide it, and show a TY div
     console.log('Checking if ajax set to run.');
@@ -235,6 +278,3 @@
 
   };
 })(jQuery);
-$(document).ready(function() {
-$.salsaform();
-});

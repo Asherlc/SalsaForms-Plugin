@@ -307,6 +307,7 @@ input.error,#state_select.error,#cc_month.error,#cc_year.error
 
 .salsa form, #success-message {
   float: right;
+  min-width: 250px;
   width: 27%;
 }
 
@@ -337,4 +338,12 @@ input.error,#state_select.error,#cc_month.error,#cc_year.error
 
 .memberSignup {
   display: none;
+}
+
+label.validate-error {
+  background: none repeat scroll 0 0 transparent;
+  border: medium none;
+  box-shadow: none;
+  color: red!important;
+  padding: 5px;
 }
