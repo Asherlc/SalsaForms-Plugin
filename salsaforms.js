@@ -21,7 +21,9 @@
       //Set a default thank you message
       thankYouMessage: 'Now, share your action with your friends:',
       //Should we prettify the form, or assume that the site has built-in CSS for the form?
-      prettify: true
+      prettify: true,
+      //Should we restructure the page?
+      restructure: true
     };
     
     //Is there a redirect URL present? If so, set the default to no ajax
@@ -47,8 +49,11 @@
     }
 
 
-    //Add the CSS styles to the page
-    $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/SalsaForms-structure-2.0.css" type="text/css" />');
+    //Add the CSS styles to the page if structure uption is true
+    if (options.restructure) {
+      $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/SalsaForms-structure-2.0.css" type="text/css" />');
+    }
+    //If the prettify option is set to true, load the rest of the styles
     if (options.prettify) {
       console.log('Adding the prettifying styles..');
       $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/SalsaForms-2.0.css" type="text/css" />');
@@ -168,6 +173,11 @@
       $('.salsa form style').nextUntil('input').detach().insertBefore(form).wrapAll('<div id="info-page" />');
     }
 
+    function restructureQuestionnairePage() {
+      console.log('Cleaning up this questionnaire page...');
+      $('.salsa form style').nextUntil('input').detach().insertBefore(form).wrapAll('<div id="info-page" class="questionnaire" />');
+    }
+
     //This is for TAF pages
     function restructureTAFPage() {
       console.log('Cleaning up this TAF pages...');
@@ -225,6 +235,8 @@
         restructureTAFPage();
         break;
       case 'questionnaire':
+        console.log('This is a questionnaire page');
+        restructureQuestionnairePage();
         break;
       case 'supporter_my_donate_page':
         break;

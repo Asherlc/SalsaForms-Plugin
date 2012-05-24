@@ -53,3 +53,7 @@ FAQ:
 Q: Why are jQuery and the plugin included in the sample code?
 
 A: Because Salsa loads an ancient version of jQuery, which prevents this form from working. So, we have to override it right away with the new version, then give it the plugin right away. Fun!
+
+Q: The (mandatory) WYSIWIG in the questionnaire wizard won't let me include the code!
+
+A: Buck up, chum. Simply make a questionnaire-only template!

@@ -238,22 +238,6 @@ label:hover
   top:1px;
 }
 
-.salsa label.error
-{
-  display:inline;
-  border:1px solid;
-  background-repeat:no-repeat;
-  background-position:10px center;
-  color:#D8000C;
-  background-color:#FFBABA;
-  background-image:url(https://assets.trilogyinteractive.com/shared/img/validate_error.png);
-  float:right;
-  width:33%;
-  font-size:12px;
-  margin:0;
-  padding:4px 4px 4px 40px;
-}
-
 .message,div.error
 {
   border:1px solid;
@@ -319,4 +303,3 @@ label.validate-error {
   color: red!important;
   padding: 5px;
 }
-

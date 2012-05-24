@@ -7,6 +7,11 @@
     margin-right: 25px;
     width: 50%;
 }
+#info-page.questionnaire {
+    float: left;
+    margin-right: 25px;
+    width: 40%;
+}
 
 #addthis {
   background: none repeat scroll 0 0 white;
@@ -34,5 +39,16 @@
 
 .salsa.donation form {
   width: 100%!important;
+  float: none!important;
+}
+#questionnaireForm {
+  width: 500px;
+}
+.checkbox {
+width: 100%!important;
+display: block!important;
+}
+.checkboxLabel {
+  display: inline!important;
   float: none!important;
 }
