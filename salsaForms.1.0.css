@@ -299,25 +299,3 @@ label.validate-error {
   color: red!important;
   padding: 5px;
 }
-.memberCode {
-  display: none;
-}
-
-.salsa .petitionContent {
-    background-color: white;
-    border: 1px solid #CCCCAA;
-    border-radius: 5px 5px 5px 5px;
-    max-height: 600px;
-    overflow: auto;
-    padding: 17px;
-    margin: 10px 0;
-}
-
-#questionnaireQuestions .formRow .salsaradio, #questionnaireQuestions .formRow label.radioLabel {
-    border-width: 0;
-    clear: none;
-    display: inline;
-    float: none;
-    margin-right: 0.5em;
-    width: 20px;
-}

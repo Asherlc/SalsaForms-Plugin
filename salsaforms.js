@@ -23,19 +23,59 @@
       //Should we prettify the form, or assume that the site has built-in CSS for the form?
       prettify: true,
       //Should we restructure the page?
-      restructure: true
+      restructure: true,
+      //Should this be a responsive page?
+      responsive: true,
+      //Force mobile layout?
+      mobile: false
     };
+
+
+    
     
     //Is there a redirect URL present? If so, set the default to no ajax
     console.log('Checking for a redirect...');
-    if ($('[name="redirect"]').val() === 'thankYou.sjs') {
+    var redirectVal = $('[name="redirect"]').val();
+    if (redirectVal === 'thankYou.sjs') {
       console.log('There is a redirect, but it is a default one. Proceeding with ajax');
-    }else if ($('[name="redirect"]').val().length > 1) {
+    }else if (redirectVal.length > 1) {
       console.log('Looks like we have a redirect. Set ajax to false');
       defaults.ajax = false;
     }
 
+    //Check to see if this is a mobile device
+    console.log('Checking for mobile device');
+    if( navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i)){
+      console.log('Mobile device detected');
+      // If responsiveness is enabled, set the mobile option to true
+      if (defaults.responsive === true) {
+        console.log('Responsiveness is enabled');
+        defaults.mobile = true;
+        console.log('Mobile layout set to true');
+      }
+    }
+
     options = $.extend(defaults,options);
+    var head = $('head');
+    //Add the CSS styles to the page if structure uption is true
+    if (options.restructure) {
+      head.append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/jquery-salsaforms-1-0/salsaForms-structure.1.0.css" type="text/css" />');
+    }
+    //If the prettify option is set to true, load the rest of the styles
+    if (options.prettify) {
+      console.log('Adding the prettifying styles..');
+      head.append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/jquery-salsaforms-1-0/salsaForms.1.0.css" type="text/css" />');
+    }
+
+    //Load the addThis and Validate JS files
+    var mobileRestructureReady = false;
+    $.getScript('https://s7.addthis.com/js/250/addthis_widget.js#domready=1', function() {
+      console.log('Addthis script loaded');
+    });
+    $.getScript('https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js', function() {
+      console.log('Validate script loaded');
+      validateForm();
+    });
 
     function validateForm() {
       //If the validation option is truthy, use the jQuery validate plugin
@@ -47,26 +87,6 @@
         form.validate(validateOptions);
       }
     }
-
-
-    //Add the CSS styles to the page if structure uption is true
-    if (options.restructure) {
-      $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/SalsaForms-structure-2.0.css" type="text/css" />');
-    }
-    //If the prettify option is set to true, load the rest of the styles
-    if (options.prettify) {
-      console.log('Adding the prettifying styles..');
-      $('head').append('<link rel="stylesheet" href="https://assets.trilogyinteractive.com/shared/css/SalsaForms-2.0.css" type="text/css" />');
-    }
-
-    //Load the addThis and Validate JS files
-    $.getScript('https://s7.addthis.com/js/250/addthis_widget.js#domready=1', function() {
-      console.log('Addthis script loaded');
-    });
-    $.getScript('https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js', function() {
-      console.log('Validate script loaded');
-      validateForm();
-    });
 
     //Give the fields appropriate classes to use jQuery validate with little to no tweaking
     function setValidationClasses() {
@@ -216,31 +236,36 @@
 
     //Now that we know what kind of page it is, let's get the elements we want and store them in handy variables
     console.log('Switching through page types...');
-    switch (getPageType())
-    {
-      case 'signup_page':
-        console.log('This is a signup page');
-        restructureSignupPage();
-        break;
-      case 'donate_page':
-        console.log('This is a donation page');
-        addDonationValidationClasses();
-        break;
-      case 'action':
-        console.log('This is an action page');
-        restructureActionPage();
-        break;
-      case 'tell_a_friend':
-        console.log('This is a TAF page');
-        restructureTAFPage();
-        break;
-      case 'questionnaire':
-        console.log('This is a questionnaire page');
-        restructureQuestionnairePage();
-        break;
-      case 'supporter_my_donate_page':
-        break;
+    console.log('Restructure is '+options.restructure);
+    if (options.restructure) {
+      switch (getPageType())
+      {
+        case 'signup_page':
+          console.log('This is a signup page');
+          restructureSignupPage();
+          break;
+        case 'donate_page':
+          console.log('This is a donation page');
+          addDonationValidationClasses();
+          break;
+        case 'action':
+          console.log('This is an action page');
+          restructureActionPage();
+          break;
+        case 'tell_a_friend':
+          console.log('This is a TAF page');
+          restructureTAFPage();
+          break;
+        case 'questionnaire':
+          console.log('This is a questionnaire page');
+          restructureQuestionnairePage();
+          break;
+        case 'supporter_my_donate_page':
+          break;
+      }
     }
+
+
 
     var validateOptions = {
       //errorPlacement: function(error, element) {},
@@ -293,6 +318,7 @@
       }
     };
 
+
     //If the ajax option is truthy, then submit the form with ajax, hide it, and show a TY div
     console.log('Checking if ajax set to run.');
     if (options.ajax) {
@@ -303,6 +329,28 @@
     //Change the submit button text
     console.log('Changing the submit button text to: '+options.buttonText);
     $('div.salsa input[type="submit"]').val(options.buttonText);
+
+    //This restructures the page for mobile optimization
+    if (options.mobile) {
+      console.log('Mobile option is true, so restructing');
+      mobileRestructure();
+    }
+
+    function mobileRestructure() {
+      $(window).load(function() {
+        var salsaDiv = $('div.salsa').addClass('mobile');
+        console.log('Restructuring for mobile...');
+        //Add the resize stuff to the head
+        $('head').append('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">');
+        //Store the actual action div for later
+        salsaDiv.detach();
+        //Empty out the body, because we want a clean slate
+        $('body').empty();
+        //Reattach the action div to the boddy
+        $('body').append(salsaDiv);
+      });
+    }
+
 
   };
 })(jQuery);
