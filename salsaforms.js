@@ -52,6 +52,8 @@
         console.log('Responsiveness is enabled');
         defaults.mobile = true;
         console.log('Mobile layout set to true');
+        //Set Ajax to false, because it doesn't work for some reason after the responsiveness
+        defaults.ajax = false;
       }
     }
 
@@ -337,6 +339,7 @@
     }
 
     function mobileRestructure() {
+      //The mobile restructuring is all done after the entire page is loaded, because it breaks the validate method otherwise for some reason. This is really suboptimal, but not sure why it's necessary.
       $(window).load(function() {
         var salsaDiv = $('div.salsa').addClass('mobile');
         console.log('Restructuring for mobile...');
