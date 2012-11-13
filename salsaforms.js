@@ -1,5 +1,5 @@
 (function($) {
-  $.salsaform = function (options) {
+  $.fn.salsaForm = function (options) {
     var form = $(this),
         defaults,
         validateOptions,
