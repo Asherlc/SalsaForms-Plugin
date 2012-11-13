@@ -1,9 +1,12 @@
 (function($) {
+
+  "use strict";
+
   $.fn.salsaForm = function (options) {
     var form = $(this),
         defaults,
         validateOptions,
-        restructure
+        restructure;
 
     //Set the default for the options
     defaults = {
@@ -11,8 +14,8 @@
         validate : true,
         //What should the submit button say?
         buttonText : 'Take Action',
-        //Should this use AddThis for the TY?
-        addThis: true,
+        //Should this use addthis for the TY?
+        addthis: true,
         //Set a default thank you message
         thankYouMessage: 'Now, share your action with your friends:',
         //Should we restructure the page?
@@ -23,8 +26,8 @@
 
     options = $.extend(defaults,options);
 
-    function mobileDevice? {
-        return navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i
+    function mobileDevice() {
+        return navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i);
     }
 
     function setValidationClasses() {
@@ -43,20 +46,20 @@
       
     }
 
-    //Load the AddThis stuff into the page
-    function loadAddThis() {
-      var buttons = ['email', 'google_plusone', 'tweet', 'facebook_like', 'expanded'];,
-          addThisButtons
+    //Load the addthis stuff into the page
+    function loadaddthis() {
+      var buttons = ['email', 'google_plusone', 'tweet', 'facebook_like', 'expanded'],
+          addthisButtons;
 
       //Initialize the variable that will hold our HTML string
-      addThisButtons = '<div id="addthis">';
+      addthisButtons = '<div id="addthis">';
       //Cycle through the hash, and make an anchor element for each
       for (var button in buttons) {
-        addThisButtons += '<a class="addthis_button_'+buttons[buttons]+'"></a>';
+        addthisButtons += '<a class="addthis_button_'+buttons[button]+'"></a>';
       }
-      addThisButtons += '</div>';
-      $('#success-message').append(addThisButtons);
-      //Initialize AddThis magic on that div
+      addthisButtons += '</div>';
+      $('#success-message').append(addthisButtons);
+      //Initialize addthis magic on that div
       addthis.toolbox("#success-message");
       addthis.init();
     }
@@ -78,7 +81,7 @@
                 form.slideUp('slow',
                   function () {
                       form.replaceWith('<div id="success-message"><h2>Thank you!</h2><p>'+options.thankYouMessage+'</p></div>');
-                      loadAddThis();
+                      loadaddthis();
                       form.slideDown();
                 });
             }
@@ -107,7 +110,7 @@
         supporter_my_donate_page: function() {
           //Not yet implemented
         }
-    }
+    };
 
     function URLParams() {
         var vars = {};
@@ -126,29 +129,29 @@
     }
 
     function pageType() {
-        var pageType
+        var type;
         //Iterate over the parameters, find on that has _KEY in it (that tells us what page type it is)
         $.each(URLParams(), function(parameterName, value) {
-            var keyPattern
+            var keyPattern;
             keyPattern = new RegExp( "_KEY" );
             if (keyPattern.test(parameterName)) {
-              pageType = parameterName.replace( '_KEY', '' );
+              type = parameterName.replace( '_KEY', '' );
             }
        });
-      return pageType;
+      return type;
     }
 
     if (options.restructure) {
-      pageType = pageType()
-      restructure[pageType]();
+      var type = pageType();
+      restructure[type]();
     }
-    if (options.addThis && !(form.find('[name="redirect"]').val().length > 1) && addThis) {
+    if (options.addthis && (form.find('[name="redirect"]').val().length < 1) && addthis) {
       submitFormAjax();
     }
-    if (options.mobile && mobileDevice?()) {
+    if (options.mobile && mobileDevice()) {
         mobileRestructure();
     }
-    if (options.validate && $.validate()) {
+    if (options.validate && $().validate()) {
         setValidationClasses();
         form.validate(validateOptions);
     }
