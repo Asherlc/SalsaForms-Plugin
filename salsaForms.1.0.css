@@ -299,3 +299,7 @@ label.validate-error {
   color: red!important;
   padding: 5px;
 }
+
+#signers-page.mobile {
+  display: none;
+}

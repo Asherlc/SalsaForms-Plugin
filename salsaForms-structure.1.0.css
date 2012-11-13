@@ -5,7 +5,7 @@
 #info-page {
   float: left;
   margin-right: 25px;
-  width: 70%;
+  width: 60%;
 }
 
 #info-page.taf {
@@ -51,10 +51,36 @@
   width: 500px;
 }
 .checkbox {
-width: 100%!important;
-display: block!important;
+  width: 100%!important;
+  display: block!important;
 }
 .checkboxLabel {
   display: inline!important;
   float: none!important;
+}
+
+#signers-page.mobile {
+  display: none;
+}
+
+#info-page.mobile {
+  float: none!important;
+}
+
+#mainForm.mobile {
+    float: left;
+    clear: both;
+}
+
+.description {
+    float: left;
+    padding: 10px;
+}
+
+.salsa .petitionContent {
+  clear:left;
+}
+
+#actionfooter {
+  display: none;
 }
