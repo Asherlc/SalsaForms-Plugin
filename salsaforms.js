@@ -20,15 +20,9 @@
         thankYouMessage: 'Now, share your action with your friends:',
         //Should we restructure the page?
         restructure: true,
-        //Restructure if device is mobile?
-        mobile: true
     };
 
     options = $.extend(defaults,options);
-
-    function mobileDevice() {
-        return navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i);
-    }
 
     function setValidationClasses() {
         form.find('[name="Email"], [name="emailString"]').addClass('email');
@@ -46,25 +40,21 @@
       
     }
 
-    //Load the addthis stuff into the page
     function loadaddthis() {
       var buttons = ['email', 'google_plusone', 'tweet', 'facebook_like', 'expanded'],
           addthisButtons;
 
-      //Initialize the variable that will hold our HTML string
       addthisButtons = '<div id="addthis">';
-      //Cycle through the hash, and make an anchor element for each
       for (var button in buttons) {
         addthisButtons += '<a class="addthis_button_'+buttons[button]+'"></a>';
       }
       addthisButtons += '</div>';
       $('#success-message').append(addthisButtons);
-      //Initialize addthis magic on that div
+ 
       addthis.toolbox("#success-message");
       addthis.init();
     }
 
-    //This function submits a form via Ajax
     function submitFormAjax() {
         form.submit(function(e) {
             var formData;
@@ -89,7 +79,6 @@
     }
 
 
-    //These functions restructure the page, so that it is easier to style
     restructure = {
         action: function() {
             $('div#signers-page').insertAfter(form);
@@ -120,14 +109,6 @@
         return vars;
     }
 
-    function mobileRestructure() {
-        var salsaDiv = $('div.salsa').addClass('mobile').detach();
-
-        $('head').append('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">');
-        $('body').empty().append(salsaDiv);
-        $('#signers-page, #info-page, #mainForm').addClass('mobile');
-    }
-
     function pageType() {
         var type;
         //Iterate over the parameters, find on that has _KEY in it (that tells us what page type it is)
@@ -147,9 +128,6 @@
     }
     if (options.addthis && (form.find('[name="redirect"]').val().length < 1) && addthis) {
       submitFormAjax();
-    }
-    if (options.mobile && mobileDevice()) {
-        mobileRestructure();
     }
     if (options.validate && $().validate()) {
         setValidationClasses();
